@@ -2,6 +2,7 @@
 
 namespace Webbingbrasil\FilamentMaps;
 
+use Filament\Facades\Filament;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Contracts\View\View;
@@ -30,13 +31,15 @@ class FilamentMapsProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        FilamentView::registerRenderHook(
-            PanelsRenderHook::HEAD_END,
-            fn (): View => view('filament-maps::styles'),
-        );
-        FilamentView::registerRenderHook(
-            PanelsRenderHook::SCRIPTS_BEFORE,
-            fn (): View => view('filament-maps::scripts'),
-        );
+        Filament::serving(function () {
+            FilamentView::registerRenderHook(
+                PanelsRenderHook::HEAD_END,
+                fn (): View => view('filament-maps::styles'),
+            );
+            FilamentView::registerRenderHook(
+                PanelsRenderHook::SCRIPTS_BEFORE,
+                fn (): View => view('filament-maps::scripts'),
+            );
+        });
     }
 }
